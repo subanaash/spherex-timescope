@@ -42,7 +42,7 @@ The application uses publicly available SPHEREx data hosted by NASA/IPAC IRSA.
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/spherex-timescope.git
+git clone https://github.com/subanaash/spherex-timescope.git
 cd spherex-timescope
 ```
 
