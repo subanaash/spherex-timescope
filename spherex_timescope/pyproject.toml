@@ -1,0 +1,16 @@
+[project]
+name = "spherex-timescope"
+version = "1.0.0"
+description = "A lightweight explorer and comparison tool for public SPHEREx Level 2 data"
+requires-python = ">=3.10,<3.14"
+dependencies = [
+  "streamlit>=1.40",
+  "boto3>=1.35",
+  "astropy>=6.1",
+  "numpy>=1.26",
+  "pandas>=2.2",
+  "matplotlib>=3.8",
+]
+
+[tool.uv]
+package = false
