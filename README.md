@@ -37,6 +37,26 @@ The application uses publicly available SPHEREx data hosted by NASA/IPAC IRSA.
 - **Public Archive:** https://nasa-irsa-spherex.s3.amazonaws.com/
 - **Documentation:** https://caltech-ipac.github.io/spherex-archive-documentation/
 
+## Screenshots
+
+**Dashboard**
+<img width="1477" height="877" alt="image" src="https://github.com/user-attachments/assets/b5ad4494-8d78-4bf7-8863-739408605271" />
+
+**FITS Image Explorer**
+<img width="1087" height="531" alt="image" src="https://github.com/user-attachments/assets/f299be5c-d53d-4eb1-ba39-a9a09beb85dd" />
+
+**Observation Comparison**
+<img width="833" height="747" alt="image" src="https://github.com/user-attachments/assets/5f451af8-c4b0-49f8-b1a2-efc1985d659a" />
+<img width="840" height="877" alt="image" src="https://github.com/user-attachments/assets/8253bb18-df17-4e7c-862a-90d7392cfaf8" />
+
+**AI Assistant**
+<img width="837" height="855" alt="image" src="https://github.com/user-attachments/assets/bb362f61-166a-43cd-b653-6fbd6d445b1c" />
+<img width="792" height="953" alt="image" src="https://github.com/user-attachments/assets/745e9416-68e0-4740-b146-f3cb5ce93f33" />
+<img width="825" height="991" alt="image" src="https://github.com/user-attachments/assets/5aaf0f99-9e12-4d23-a5b0-960583238d71" />
+
+
+
+
 ## Installation
 
 ### 1. Clone the repository
