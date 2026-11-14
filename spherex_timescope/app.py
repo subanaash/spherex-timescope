@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import io
+import re
 import html
 import traceback
 import textwrap
@@ -568,13 +569,49 @@ def metadata_table(
 # LOCAL AI + RAG FUNCTIONS
 # =========================================================
 
-def ollama_request(endpoint, payload):
+def clean_answer(text: str) -> str:
+    """Keep only the final answer and remove Qwen3 thinking text."""
+
+    if not text:
+        return ""
+
+    # Qwen3 sometimes prints its thinking first and then </think>.
+    # Keep only what comes after the last </think>.
+    if "</think>" in text:
+        text = text.split("</think>")[-1]
+
+    # Also remove a normal <think>...</think> block if present.
+    text = re.sub(
+        r"<think>.*?</think>",
+        "",
+        text,
+        flags=re.DOTALL,
+    )
+
+    # Remove a leftover "Final answer:" label if it is at the start.
+    text = re.sub(
+        r"^\s*Final answer:\s*",
+        "",
+        text,
+        flags=re.IGNORECASE,
+    )
+
+    return text.strip()
+
+
+def ollama_request(endpoint, payload, method="POST"):
     try:
-        response = requests.post(
-            f"{OLLAMA_URL}{endpoint}",
-            json=payload,
-            timeout=300
-        )
+        if method == "GET":
+            response = requests.get(
+                f"{OLLAMA_URL}{endpoint}",
+                timeout=300
+            )
+        else:
+            response = requests.post(
+                f"{OLLAMA_URL}{endpoint}",
+                json=payload,
+                timeout=300
+            )
 
         response.raise_for_status()
         return response.json()
@@ -707,6 +744,12 @@ IMPORTANT RULES:
 6. Do not claim to perform scientific image interpretation.
 7. Explain technical concepts in beginner-friendly language.
 8. If the context does not support an answer, say so.
+9. Output only the final answer. Never show your reasoning,
+   your plan, or your thinking.
+10. Never explain what the name SPHEREx stands for unless the
+    retrieved reference information says it.
+11. If the user misspells a name, answer the likely question
+    briefly without discussing the misspelling at length.
 
 SELECTED OBSERVATION CONTEXT:
 {observation_context}
@@ -717,7 +760,7 @@ RETRIEVED REFERENCE INFORMATION:
 USER QUESTION:
 {question}
 
-Answer clearly and concisely.
+Answer clearly and concisely. /no_think
 """
 
     result = ollama_request(
@@ -738,9 +781,11 @@ Answer clearly and concisely.
         },
     )
 
-    answer = result.get(
+    raw_answer = result.get(
         "message", {}
-    ).get("content", "").strip()
+    ).get("content", "")
+
+    answer = clean_answer(raw_answer)
 
     if not answer:
         raise RuntimeError(
@@ -1446,7 +1491,8 @@ with tab_ai:
 
             result = ollama_request(
                 "/api/tags",
-                {},
+                None,
+                method="GET",
             )
 
             model_names = [
@@ -1718,7 +1764,7 @@ with tab_ai:
 
             with st.chat_message("assistant"):
 
-                st.write(message["answer"])
+                st.write(clean_answer(message["answer"]))
 
                 with st.expander("Retrieved reference sources"):
 
@@ -1819,4 +1865,4 @@ st.markdown(
     'NASA SPHEREx Public Archive'
     '</p>',
     unsafe_allow_html=True,
-)            
+)
